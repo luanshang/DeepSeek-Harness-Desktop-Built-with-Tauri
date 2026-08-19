@@ -53,8 +53,12 @@ npm run bundle    # = fetch:node → prepare:runtime → 构建 NSIS 安装器
 ### 4. 签名安装包
 
 ```powershell
-npm run tauri -- signer sign -k "$env:USERPROFILE\.tauri\dsh-desktop.key" "src-tauri\target\release\bundle\nsis\DeepSeek Harness Desktop_<版本>_x64-setup.exe"
+$env:TAURI_SIGNING_PRIVATE_KEY_PASSWORD = "你的私钥密码"
+npm run tauri -- signer sign --private-key-path "$env:USERPROFILE\.tauri\dsh-desktop.key" "src-tauri\target\release\bundle\nsis\DeepSeek Harness Desktop_<版本>_x64-setup.exe"
 ```
+
+> 注意：`--private-key-path` 才是"私钥文件路径"；`-k` / `--private-key` 收的是**密钥字符串本身**（base64 内容，通常由 `TAURI_SIGNING_PRIVATE_KEY` 环境变量提供），直接传文件路径会报
+> `failed to decode base64 secret key: Invalid symbol ...`。
 
 在 exe 同目录生成 `<exe>.sig`。
 
@@ -103,6 +107,7 @@ git push origin v1.5.0
 - **签名后别动 exe 和 sig**：`build-latest-json.mjs` 只认 `nsis` 目录里唯一一个 `*.exe.sig`，步骤 4 → 5 之间保持产物原样。
 - **latest.json 里的版本 / tag 要和 Release 一致**：脚本第 5 步的 `v<版本>` 就是下载 URL 里的 tag，写错 = 用户点更新 404。
 - **`createUpdaterArtifacts` 保持 `false`**：项目特意关了它并用手动脚本——tauri-action 对带空格的 productName 生成 latest.json 有上游 bug（见 `build-latest-json.mjs` 头部注释），本地手动流程最稳。
+- **签名时用 `--private-key-path` 传私钥文件**：`-k`/`--private-key` 只接受密钥字符串，传文件路径会报 `failed to decode base64 secret key`。密码用环境变量 `TAURI_SIGNING_PRIVATE_KEY_PASSWORD` 传入，避免交互输入出错。
 - **私钥别进仓库**：发现 `.key` 进了项目目录就立即撤销换新。
 - **内置运行时随外壳一起更新**：bundle 打出来的包把 dsh 运行时揉在安装包里，外壳更新会自动连带更新运行时（前提是步骤 1 的版本检查做过），不需要另搭一套运行时更新。
 
