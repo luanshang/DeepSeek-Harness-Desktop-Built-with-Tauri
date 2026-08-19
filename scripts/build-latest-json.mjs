@@ -45,7 +45,7 @@ const signature = readFileSync(join(nsisDir, sigName), "utf8").trim();
 // URL below 404s once uploaded.
 const uploadedName = exeName.replace(/[ ()[\]{}]/g, ".").replace(/\.\./g, ".");
 
-const url = `https://github.com/xiincs/deepseek-harness-desktop/releases/download/${releaseTag}/${uploadedName}`;
+const url = `https://github.com/luanshang/DeepSeek-Harness-Desktop-Built-with-Tauri/releases/download/${releaseTag}/${uploadedName}`;
 
 const manifest = {
   version,

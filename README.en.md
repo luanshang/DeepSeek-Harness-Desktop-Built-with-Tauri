@@ -10,13 +10,13 @@ running quietly in the background when you close the window.
 [中文](README.md) | English
 
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](./LICENSE)
-[![Latest release](https://img.shields.io/github/v/release/xiincs/deepseek-harness-desktop)](https://github.com/xiincs/deepseek-harness-desktop/releases/latest)
-[![Downloads](https://img.shields.io/github/downloads/xiincs/deepseek-harness-desktop/total)](https://github.com/xiincs/deepseek-harness-desktop/releases)
+[![Latest release](https://img.shields.io/github/v/release/luanshang/DeepSeek-Harness-Desktop-Built-with-Tauri)](https://github.com/luanshang/DeepSeek-Harness-Desktop-Built-with-Tauri/releases/latest)
+[![Downloads](https://img.shields.io/github/downloads/luanshang/DeepSeek-Harness-Desktop-Built-with-Tauri/total)](https://github.com/luanshang/DeepSeek-Harness-Desktop-Built-with-Tauri/releases)
 [![Windows](https://img.shields.io/badge/-Windows-0078D6?logo=windows&logoColor=white)](#-download)
 [![macOS](https://img.shields.io/badge/-macOS-000000?logo=apple&logoColor=white)](#-download)
 [![Linux](https://img.shields.io/badge/-Linux-FCC624?logo=linux&logoColor=black)](#-download)
 
-**[⬇️ Download now](https://github.com/xiincs/deepseek-harness-desktop/releases/latest)** ·
+**[⬇️ Download now](https://github.com/luanshang/DeepSeek-Harness-Desktop-Built-with-Tauri/releases/latest)** ·
 [Features](#-what-it-does) ·
 [FAQ](#-faq)
 
@@ -66,7 +66,7 @@ quietly in your system tray, one click away, exactly where you left it.
 
 ## ⬇️ Download
 
-Head to the **[Releases page](https://github.com/xiincs/deepseek-harness-desktop/releases/latest)**
+Head to the **[Releases page](https://github.com/luanshang/DeepSeek-Harness-Desktop-Built-with-Tauri/releases/latest)**
 and grab the installer for your system:
 
 | Platform | Installer | Notes |

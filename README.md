@@ -9,13 +9,13 @@
 中文 | [English](README.en.md)
 
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](./LICENSE)
-[![Latest release](https://img.shields.io/github/v/release/xiincs/deepseek-harness-desktop)](https://github.com/xiincs/deepseek-harness-desktop/releases/latest)
-[![Downloads](https://img.shields.io/github/downloads/xiincs/deepseek-harness-desktop/total)](https://github.com/xiincs/deepseek-harness-desktop/releases)
+[![Latest release](https://img.shields.io/github/v/release/luanshang/DeepSeek-Harness-Desktop-Built-with-Tauri)](https://github.com/luanshang/DeepSeek-Harness-Desktop-Built-with-Tauri/releases/latest)
+[![Downloads](https://img.shields.io/github/downloads/luanshang/DeepSeek-Harness-Desktop-Built-with-Tauri/total)](https://github.com/luanshang/DeepSeek-Harness-Desktop-Built-with-Tauri/releases)
 [![Windows](https://img.shields.io/badge/-Windows-0078D6?logo=windows&logoColor=white)](#-下载)
 [![macOS](https://img.shields.io/badge/-macOS-000000?logo=apple&logoColor=white)](#-下载)
 [![Linux](https://img.shields.io/badge/-Linux-FCC624?logo=linux&logoColor=black)](#-下载)
 
-**[⬇️ 立即下载](https://github.com/xiincs/deepseek-harness-desktop/releases/latest)** ·
+**[⬇️ 立即下载](https://github.com/luanshang/DeepSeek-Harness-Desktop-Built-with-Tauri/releases/latest)** ·
 [功能一览](#-这个应用能做什么) ·
 [常见问题](#-常见问题)
 
@@ -56,7 +56,7 @@ Dock 上，双击就开，关窗口不等于退出——它安静地待在系统
 
 ## ⬇️ 下载
 
-前往 **[Releases 页面](https://github.com/xiincs/deepseek-harness-desktop/releases/latest)**，
+前往 **[Releases 页面](https://github.com/luanshang/DeepSeek-Harness-Desktop-Built-with-Tauri/releases/latest)**，
 根据你的系统下载对应安装包：
 
 | 系统 | 安装包 | 说明 |
