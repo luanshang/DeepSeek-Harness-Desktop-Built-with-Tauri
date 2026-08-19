@@ -1,0 +1,13 @@
+# Theme config
+header_menu:
+  Home: /
+  GitHub: https://github.com/luanshang/DeepSeek-Harness-Desktop-Built-with-Tauri
+  Releases: https://github.com/luanshang/DeepSeek-Harness-Desktop-Built-with-Tauri/releases/latest
+
+footer_links:
+  - title: GitHub
+    url: https://github.com/luanshang/DeepSeek-Harness-Desktop-Built-with-Tauri
+  - title: README
+    url: https://github.com/luanshang/DeepSeek-Harness-Desktop-Built-with-Tauri#readme
+  - title: MIT License
+    url: https://github.com/luanshang/DeepSeek-Harness-Desktop-Built-with-Tauri/blob/main/LICENSE

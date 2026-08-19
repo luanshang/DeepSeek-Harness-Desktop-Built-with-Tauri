@@ -1,0 +1,73 @@
+# Hexo Configuration
+title: DeepSeek Harness Desktop
+subtitle: ''
+description: A Tauri desktop wrapper for DeepSeek Harness — double-click to launch, runs in system tray, built-in file panel, terminal and plugin marketplace.
+author: luanshang
+language: zh-CN
+timezone: Asia/Shanghai
+
+url: https://luanshang.github.io/DeepSeek-Harness-Desktop-Built-with-Tauri
+root: /DeepSeek-Harness-Desktop-Built-with-Tauri
+permalink: :year/:month/:day/:title/
+
+# Directory
+source_dir: source
+public_dir: public
+tag_dir: tags
+archive_dir: archives
+category_dir: categories
+code_dir: downloads/code
+i18n_dir: :lang
+skip_render:
+
+# Writing
+new_post_name: :title.md
+default_layout: page
+titlecase: false
+external_link:
+  enable: true
+  field: site
+  exclude: ''
+filename_case: 0
+render_drafts: false
+post_asset_folder: false
+relative_link: false
+future: true
+syntax_highlighter: highlight.js
+
+# Home page setting
+index_generator:
+  path: ''
+  per_page: 0
+  order_by: -date
+
+# Category & Tag
+default_category: uncategorized
+category_map:
+tag_map:
+
+# Metadata elements
+meta_generator: true
+
+# Date / Time format
+date_format: YYYY-MM-DD
+time_format: HH:mm:ss
+updated_option: mtime
+
+# Pagination
+per_page: 0
+pagination_dir: page
+
+# Include / Exclude files
+include:
+exclude:
+ignore:
+
+# Extensions
+theme: dsh-landing
+
+# Deployment
+deploy:
+  type: git
+  repo: https://github.com/luanshang/DeepSeek-Harness-Desktop-Built-with-Tauri.git
+  branch: gh-pages

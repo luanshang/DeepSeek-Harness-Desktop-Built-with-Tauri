@@ -34,3 +34,7 @@ installer-host/Cargo.lock
 installer-host/icons/
 installer-host/gen/
 
+# Hexo project website
+website/node_modules/
+website/public/
+

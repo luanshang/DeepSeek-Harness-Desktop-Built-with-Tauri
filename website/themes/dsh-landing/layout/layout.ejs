@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="<%= config.language %>">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= page.title || config.title %></title>
+  <meta name="description" content="<%= config.description %>">
+  <link rel="stylesheet" href="<%= url_for('/css/style.css') %>">
+  <link rel="icon" href="https://github.com/luanshang/DeepSeek-Harness-Desktop-Built-with-Tauri/raw/main/src-tauri/icons/icon.png" type="image/png">
+</head>
+<body>
+  <%- partial('partial/header') %>
+  <main>
+    <%- body %>
+  </main>
+  <%- partial('partial/footer') %>
+</body>
+</html>
