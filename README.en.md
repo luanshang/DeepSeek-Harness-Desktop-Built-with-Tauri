@@ -74,6 +74,12 @@ and grab the installer for your system:
 > Only Windows builds are available for now; macOS and Linux support is not enabled yet.
 > On first run, Windows SmartScreen may show a warning (the installer isn't code-signed) — click "More info → Run anyway".
 
+The installer features a clean wizard interface — just choose your installation directory and click "Next" to finish. The app launches automatically after installation.
+
+<p align="center">
+  <img src="docs/screenshots/app-installer.png" alt="Installer screenshot" width="400">
+</p>
+
 <p align="center">
   <img src="docs/screenshots/app-boot.png" alt="Boot page" width="400">
 </p>

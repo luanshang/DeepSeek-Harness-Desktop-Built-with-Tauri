@@ -64,6 +64,12 @@ Dock 上，双击就开，关窗口不等于退出——它安静地待在系统
 > 目前仅提供 Windows 版本；macOS / Linux 平台支持尚未启用。
 > 首次运行时 Windows SmartScreen 可能弹出提示（安装包未购买代码签名证书），点「更多信息 → 仍要运行」即可。
 
+安装程序采用简洁的向导式界面，选择安装目录后一路「下一步」即可完成，之后自动启动应用。
+
+<p align="center">
+  <img src="docs/screenshots/app-installer.png" alt="安装器截图" width="400">
+</p>
+
 <p align="center">
   <img src="docs/screenshots/app-boot.png" alt="启动页" width="400">
 </p>
