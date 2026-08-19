@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>DeepSeek Harness Desktop</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <main class="installer-shell">
+    <section id="drag-region" class="brand-panel" aria-hidden="true">
+      <div class="brand-mark"><span></span></div>
+      <p class="brand-kicker">DESKTOP WORKSPACE</p>
+      <h1>DeepSeek<br>Harness</h1>
+      <p class="brand-copy">一个安静、专注的本地 AI 工作空间。</p>
+      <div class="brand-footer">Built with Tauri</div>
+    </section>
+
+    <section class="content-panel">
+      <header class="window-actions">
+        <button id="btn-close" class="icon-button" aria-label="关闭">×</button>
+      </header>
+
+      <div class="content-body">
+        <div id="view-welcome" class="view">
+          <p class="eyebrow">WELCOME</p>
+          <h2>安装 DeepSeek Harness Desktop</h2>
+          <p class="description">把本地 Harness 工作空间带到桌面。安装过程不会修改你的 Harness 数据。</p>
+          <div class="info-row"><span>版本</span><strong id="version">1.4.9</strong></div>
+          <div class="info-row"><span>安装方式</span><strong>可在下一步选择</strong></div>
+          <button id="btn-start" class="primary-button">开始安装 <span>→</span></button>
+        </div>
+
+        <div id="view-options" class="view hidden">
+          <p class="eyebrow">INSTALL LOCATION</p>
+          <h2>选择安装位置</h2>
+          <p class="description">选择一个用于安装应用和内置运行时的文件夹。</p>
+          <label class="field-label" for="install-scope">安装范围</label>
+          <select id="install-scope" class="scope-select">
+            <option value="currentUser">仅为当前用户安装（推荐）</option>
+            <option value="perMachine">为所有用户安装（需要管理员权限）</option>
+          </select>
+          <label class="field-label" for="install-path">安装目录</label>
+          <div class="path-field">
+            <input id="install-path" type="text" spellcheck="false">
+            <button id="btn-browse" class="secondary-button">浏览</button>
+          </div>
+          <div class="actions">
+            <button id="btn-back" class="ghost-button">返回</button>
+            <button id="btn-install" class="primary-button">安装 <span>→</span></button>
+          </div>
+        </div>
+
+        <div id="view-progress" class="view hidden">
+          <p class="eyebrow">INSTALLING</p>
+          <h2 id="progress-title">正在安装</h2>
+          <p id="progress-detail" class="description">正在准备文件…</p>
+          <div class="progress-track"><div id="progress-bar" class="progress-bar"></div></div>
+          <div class="progress-meta"><span id="progress-label">准备中</span><span id="progress-percent">0%</span></div>
+          <details class="progress-detail-box">
+            <summary>展开详情</summary>
+            <pre id="install-log" class="install-log"></pre>
+          </details>
+        </div>
+
+        <div id="view-done" class="view hidden">
+          <div class="success-mark">✓</div>
+          <p class="eyebrow">READY</p>
+          <h2>安装完成</h2>
+          <p class="description">DeepSeek Harness Desktop 已准备就绪。</p>
+          <div class="done-actions">
+            <button id="btn-launch" class="primary-button">启动应用 <span>→</span></button>
+            <button id="btn-finish" class="secondary-button">完成</button>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+  <script src="app.js"></script>
+</body>
+</html>

@@ -1,0 +1,21 @@
+{
+  "name": "deepseek-harness-desktop",
+  "private": true,
+  "version": "1.4.9",
+  "description": "DeepSeek Harness Desktop, built with Tauri (Tauri wrapper around `dsh web`)",
+  "scripts": {
+    "tauri": "tauri",
+    "dev": "tauri dev",
+    "build": "tauri build",
+    "pack": "tauri build --no-bundle",
+    "bundle": "npm run fetch:node && npm run prepare:runtime && node scripts/build-installer.mjs",
+    "build:installer": "node scripts/build-installer.mjs",
+    "fetch:node": "node scripts/fetch-node.mjs",
+    "prepare:runtime": "node scripts/prepare-runtime.mjs",
+    "check:dsh-version": "node scripts/check-dsh-version.mjs",
+    "icon": "tauri icon"
+  },
+  "devDependencies": {
+    "@tauri-apps/cli": "^2"
+  }
+}

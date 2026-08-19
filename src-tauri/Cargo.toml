@@ -1,0 +1,62 @@
+[package]
+name = "dsh-desktop"
+version = "0.3.0"
+description = "DeepSeek Harness desktop app — a Tauri wrapper that hosts the dsh web server"
+authors = ["dsh-desktop contributors"]
+license = "MIT"
+edition = "2021"
+# Set to the current local Rust toolchain version.
+rust-version = "1.97.1"
+
+[lib]
+name = "dsh_desktop_lib"
+crate-type = ["staticlib", "cdylib", "rlib"]
+
+[build-dependencies]
+tauri-build = { version = "2", features = [] }
+
+[dependencies]
+tauri = { version = "2", features = ["tray-icon"] }
+tauri-plugin-opener = "2"
+tauri-plugin-notification = "2"
+tauri-plugin-updater = "2"
+tauri-plugin-single-instance = "2"
+tauri-plugin-autostart = "2"
+tauri-plugin-global-shortcut = "2"
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+# Plain http:// localhost only (dsh's own API) — TLS is never needed here,
+# so default-features off skips pulling in rustls+ring. `json` only turns on
+# ureq's own send_json/read_json paths against the serde/serde_json already
+# listed above; it adds no new transitive dependency.
+ureq = { version = "3", default-features = false, features = ["json"] }
+# ConPTY/winpty-backed shell for the terminal dock card (terminal.rs) —
+# the same crate wezterm itself is built on, chosen over shelling out via
+# plain pipes because a real PTY is what makes interactive/full-screen
+# programs (an editor, a pager, colored prompts) behave correctly instead
+# of just capturing batch stdout.
+portable-pty = "0.9"
+# Ferries PTY output bytes to the frontend as event payloads (see
+# spawn_reader in terminal.rs) — a JSON string can't carry arbitrary
+# control/partial-UTF-8 bytes directly, and this sidesteps that instead of
+# hand-rolling the escaping.
+base64 = "0.22"
+
+[target.'cfg(windows)'.dependencies]
+# Raw WebView2 settings access (disabling the default context menu) —
+# see `disable_context_menu` in lib.rs.
+webview2-com = "0.38"
+# Win32_System_Environment: ExpandEnvironmentStringsW, used by
+# effective_path in server.rs to resolve %VAR% placeholders (e.g.
+# %NVM_SYMLINK%) that show up literally in registry PATH values — winreg's
+# own get_value reads REG_EXPAND_SZ as a plain string and never expands it.
+windows = { version = "0.61", features = ["Win32_Foundation", "Win32_System_Environment"] }
+# Reads the registry's real user+machine PATH — see `effective_path` in
+# server.rs.
+winreg = "0.52"
+
+[profile.release]
+codegen-units = 1
+lto = true
+opt-level = "s"
+strip = true

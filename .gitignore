@@ -1,0 +1,36 @@
+# Node
+node_modules/
+*.log
+
+# Rust / Tauri
+src-tauri/target/
+src-tauri/gen/schemas/
+
+# Generated runtime (downloaded dsh runtime / node.exe for bundling)
+src-tauri/resources/runtime/
+
+# Generated per-release by scripts/build-latest-json.mjs
+/latest.json
+
+# Internal working notes (handoff docs, etc.) — useful locally, not meant
+# for the public repo: quotes private conversation, narrates in-progress
+# debugging. docs/screenshots/ stays tracked; only this subfolder is ignored.
+docs/internal/
+
+# Internal planning notes — useful locally, not meant for the public repo.
+docs/ROADMAP.md
+docs/TODO.md
+
+# OS / editor
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+
+# Standalone CSS installer generated payload/host
+installer/payload.exe
+installer-host/target/
+installer-host/Cargo.lock
+installer-host/icons/
+installer-host/gen/
+

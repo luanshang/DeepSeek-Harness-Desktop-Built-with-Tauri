@@ -1,0 +1,32 @@
+{
+  "$schema": "https://schema.tauri.app/config/2",
+  "productName": "DeepSeek Harness Desktop Setup",
+  "version": "1.4.9",
+  "identifier": "dev.dsh.desktop.installer",
+  "build": {
+    "frontendDist": "../installer/ui"
+  },
+  "app": {
+    "withGlobalTauri": true,
+    "windows": [{
+      "label": "installer",
+      "title": "DeepSeek Harness Desktop Setup",
+      "width": 860,
+      "height": 540,
+      "minWidth": 720,
+      "minHeight": 460,
+      "resizable": false,
+      "center": true,
+      "decorations": false,
+      "shadow": false,
+      "transparent": true
+    }],
+    "security": {
+      "csp": "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; object-src 'none'; base-uri 'self'"
+    }
+  },
+  "bundle": {
+    "active": false,
+    "icon": ["icons/icon.ico"]
+  }
+}
