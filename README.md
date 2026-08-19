@@ -12,8 +12,6 @@
 [![Latest release](https://img.shields.io/github/v/release/luanshang/DeepSeek-Harness-Desktop-Built-with-Tauri)](https://github.com/luanshang/DeepSeek-Harness-Desktop-Built-with-Tauri/releases/latest)
 [![Downloads](https://img.shields.io/github/downloads/luanshang/DeepSeek-Harness-Desktop-Built-with-Tauri/total)](https://github.com/luanshang/DeepSeek-Harness-Desktop-Built-with-Tauri/releases)
 [![Windows](https://img.shields.io/badge/-Windows-0078D6?logo=windows&logoColor=white)](#-下载)
-[![macOS](https://img.shields.io/badge/-macOS-000000?logo=apple&logoColor=white)](#-下载)
-[![Linux](https://img.shields.io/badge/-Linux-FCC624?logo=linux&logoColor=black)](#-下载)
 
 **[⬇️ 立即下载](https://github.com/luanshang/DeepSeek-Harness-Desktop-Built-with-Tauri/releases/latest)** ·
 [功能一览](#-这个应用能做什么) ·
@@ -61,11 +59,10 @@ Dock 上，双击就开，关窗口不等于退出——它安静地待在系统
 
 | 系统 | 安装包 | 说明 |
 |---|---|---|
-| Windows | `.exe` | 已签名，支持自动更新，双击安装即可 |
-| macOS | `.dmg` | 首次打开需要在「系统设置 → 隐私与安全性」里手动允许一次（未加入 Apple 开发者计划，属正常现象） |
-| Linux | `.deb` | `dpkg -i` 或用系统自带的安装器打开即可 |
+| Windows | `.exe` | 支持自动更新，双击安装即可 |
 
-> macOS / Linux 版暂不支持自动更新，有新版本时需要自己回来这个页面重新下载。
+> 目前仅提供 Windows 版本；macOS / Linux 平台支持尚未启用。
+> 首次运行时 Windows SmartScreen 可能弹出提示（安装包未购买代码签名证书），点「更多信息 → 仍要运行」即可。
 
 <p align="center">
   <img src="docs/screenshots/app-boot.png" alt="启动页" width="400">

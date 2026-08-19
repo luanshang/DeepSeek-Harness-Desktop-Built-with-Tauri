@@ -13,8 +13,6 @@ running quietly in the background when you close the window.
 [![Latest release](https://img.shields.io/github/v/release/luanshang/DeepSeek-Harness-Desktop-Built-with-Tauri)](https://github.com/luanshang/DeepSeek-Harness-Desktop-Built-with-Tauri/releases/latest)
 [![Downloads](https://img.shields.io/github/downloads/luanshang/DeepSeek-Harness-Desktop-Built-with-Tauri/total)](https://github.com/luanshang/DeepSeek-Harness-Desktop-Built-with-Tauri/releases)
 [![Windows](https://img.shields.io/badge/-Windows-0078D6?logo=windows&logoColor=white)](#-download)
-[![macOS](https://img.shields.io/badge/-macOS-000000?logo=apple&logoColor=white)](#-download)
-[![Linux](https://img.shields.io/badge/-Linux-FCC624?logo=linux&logoColor=black)](#-download)
 
 **[⬇️ Download now](https://github.com/luanshang/DeepSeek-Harness-Desktop-Built-with-Tauri/releases/latest)** ·
 [Features](#-what-it-does) ·
@@ -71,11 +69,10 @@ and grab the installer for your system:
 
 | Platform | Installer | Notes |
 |---|---|---|
-| Windows | `.exe` | Signed, auto-updates, just double-click to install |
-| macOS | `.dmg` | First launch needs a one-time manual allow in System Settings → Privacy & Security (expected — not enrolled in the Apple Developer program) |
-| Linux | `.deb` | `dpkg -i` or open with your system's package installer |
+| Windows | `.exe` | Auto-updating, just double-click to install |
 
-> macOS and Linux builds don't auto-update yet — check back here for new versions.
+> Only Windows builds are available for now; macOS and Linux support is not enabled yet.
+> On first run, Windows SmartScreen may show a warning (the installer isn't code-signed) — click "More info → Run anyway".
 
 <p align="center">
   <img src="docs/screenshots/app-boot.png" alt="Boot page" width="400">
