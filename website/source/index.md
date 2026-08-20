@@ -15,7 +15,7 @@ title: DeepSeek Harness Desktop
   </div>
 </div>
 
-## 功能亮点 {#features}
+<h2 id="features">功能亮点</h2>
 
 <div class="features-grid">
 
@@ -75,7 +75,7 @@ title: DeepSeek Harness Desktop
 
 </div>
 
-## 应用截图 {#screenshots}
+<h2 id="screenshots">应用截图</h2>
 
 <div class="screenshots-gallery">
 
@@ -96,7 +96,7 @@ title: DeepSeek Harness Desktop
 
 </div>
 
-## 下载 {#download}
+<h2 id="download">下载</h2>
 
 <div class="download-section">
 
@@ -111,7 +111,7 @@ title: DeepSeek Harness Desktop
 
 </div>
 
-## 常见问题 {#faq}
+<h2 id="faq">常见问题</h2>
 
 <div class="faq-list">
 
