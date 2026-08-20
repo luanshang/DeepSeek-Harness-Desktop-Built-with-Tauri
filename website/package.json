@@ -4,7 +4,7 @@
   "private": true,
   "description": "DeepSeek Harness Desktop project website",
   "scripts": {
-    "build": "hexo generate",
+    "build": "hexo generate && node copy-homepage.mjs",
     "clean": "hexo clean",
     "server": "hexo server",
     "deploy": "hexo deploy"
