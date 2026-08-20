@@ -15,6 +15,7 @@ use tauri_plugin_autostart::ManagerExt;
 
 pub const MENU_OPEN_BROWSER: &str = "open_browser";
 pub const MENU_RESTART: &str = "restart";
+pub const MENU_STOP: &str = "stop";
 pub const MENU_OPEN_DATA_DIR: &str = "open_data_dir";
 pub const MENU_CONNECTION_SETTINGS: &str = "connection_settings";
 pub const MENU_SHOW_WINDOW: &str = "show_window";
@@ -46,6 +47,7 @@ pub fn build_menu(app: &AppHandle) -> tauri::Result<Menu<Wry>> {
     )?;
     let open_browser = MenuItem::with_id(app, MENU_OPEN_BROWSER, "在浏览器中打开", true, None::<&str>)?;
     let restart = MenuItem::with_id(app, MENU_RESTART, "重启服务", true, None::<&str>)?;
+    let stop = MenuItem::with_id(app, MENU_STOP, "停止服务", true, None::<&str>)?;
     let open_data_dir = MenuItem::with_id(app, MENU_OPEN_DATA_DIR, "打开数据目录 (~/.dsh)", true, None::<&str>)?;
     let connection_settings = MenuItem::with_id(app, MENU_CONNECTION_SETTINGS, "连接设置", true, None::<&str>)?;
     // The custom "退出" item is gone: the app menu's standard Quit role
@@ -55,7 +57,7 @@ pub fn build_menu(app: &AppHandle) -> tauri::Result<Menu<Wry>> {
         app,
         "文件",
         true,
-        &[&open_browser, &restart, &open_data_dir, &connection_settings],
+        &[&open_browser, &restart, &stop, &open_data_dir, &connection_settings],
     )?;
     // macOS 上 Cmd+C / Cmd+V / Cmd+X / Cmd+A 等快捷键必须由菜单中的标准
     // "编辑"项提供（通过 responder chain 分发到 WebView），缺少它们会导致
@@ -104,6 +106,7 @@ pub fn build_tray(
     let show = MenuItem::with_id(app, MENU_SHOW_WINDOW, "显示窗口", true, None::<&str>)?;
     let open_browser = MenuItem::with_id(app, MENU_OPEN_BROWSER, "在浏览器中打开", true, None::<&str>)?;
     let restart = MenuItem::with_id(app, MENU_RESTART, "重启服务", true, None::<&str>)?;
+    let stop = MenuItem::with_id(app, MENU_STOP, "停止服务", true, None::<&str>)?;
     // On Windows/Linux this tray is the *only* menu (see the `set_menu()`
     // callsite in lib.rs) — include everything the removed window menu
     // offered, not just what macOS's menu bar leaves uncovered.
@@ -125,6 +128,7 @@ pub fn build_tray(
             &show,
             &open_browser,
             &restart,
+            &stop,
             &open_data_dir,
             &connection_settings,
             &autostart,

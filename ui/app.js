@@ -15,10 +15,10 @@ const els = {
   btnRestart: document.getElementById("btn-restart"),
   btnLogs: document.getElementById("btn-logs"),
   btnOpenBrowser: document.getElementById("btn-open-browser"),
-  updateBanner: document.getElementById("update-banner"),
-  updateText: document.getElementById("update-text"),
-  btnUpdateInstall: document.getElementById("btn-update-install"),
-  btnUpdateDismiss: document.getElementById("btn-update-dismiss"),
+  updateOverlay: document.getElementById("update-overlay"),
+  updateDialogText: document.getElementById("update-dialog-text"),
+  btnUpdateDialogInstall: document.getElementById("btn-update-dialog-install"),
+  btnUpdateDialogCancel: document.getElementById("btn-update-dialog-cancel"),
   providerTip: document.getElementById("provider-tip"),
   btnProviderTipDismiss: document.getElementById("btn-provider-tip-dismiss"),
   toolbar: document.getElementById("toolbar"),
@@ -157,6 +157,13 @@ function initAppMenu() {
       closeAppMenu();
       if (id === "connection_settings") {
         openConnectionSettings();
+      } else if (id === "check_update") {
+        checkForUpdate();
+      } else if (id === "stop") {
+        invoke("stop_server").catch((err) => {
+          show("error");
+          els.errorMessage.textContent = `停止服务失败: ${err}`;
+        });
       } else if (id === "restart") {
         show("starting");
         els.startingDetail.textContent = "正在重启本地服务…";
@@ -293,10 +300,15 @@ window.addEventListener("message", (event) => {
 async function checkForUpdate() {
   try {
     const update = await invoke("check_for_update");
-    if (!update) return;
-    els.updateText.textContent = `发现新版本 ${update.version}`;
-    els.updateBanner.classList.remove("hidden");
-  } catch { /* best-effort */ }
+    if (!update) {
+      window.alert("当前已是最新版本");
+      return;
+    }
+    els.updateDialogText.textContent = `发现新版本 ${update.version}，是否立即更新？`;
+    els.updateOverlay.classList.remove("hidden");
+  } catch (err) {
+    window.alert(`检查更新失败：${err}`);
+  }
 }
 
 async function init() {
@@ -326,16 +338,18 @@ async function init() {
   els.btnLogsStarting.addEventListener("click", toggleLogsStarting);
   els.btnOpenBrowser.addEventListener("click", () => invoke("open_in_browser"));
 
-  els.btnUpdateDismiss.addEventListener("click", () => { els.updateBanner.classList.add("hidden"); });
-  els.btnUpdateInstall.addEventListener("click", () => {
-    els.btnUpdateInstall.disabled = true;
-    els.btnUpdateInstall.textContent = "正在更新…";
-    els.btnUpdateDismiss.disabled = true;
+  els.btnUpdateDialogCancel.addEventListener("click", () => {
+    els.updateOverlay.classList.add("hidden");
+  });
+  els.btnUpdateDialogInstall.addEventListener("click", () => {
+    els.btnUpdateDialogInstall.disabled = true;
+    els.btnUpdateDialogInstall.textContent = "正在更新…";
+    els.btnUpdateDialogCancel.disabled = true;
     invoke("install_update").catch((err) => {
-      els.btnUpdateInstall.disabled = false;
-      els.btnUpdateInstall.textContent = "立即更新";
-      els.btnUpdateDismiss.disabled = false;
-      els.updateText.textContent = `更新失败: ${err}`;
+      els.btnUpdateDialogInstall.disabled = false;
+      els.btnUpdateDialogInstall.textContent = "立即更新";
+      els.btnUpdateDialogCancel.disabled = false;
+      els.updateDialogText.textContent = `更新失败：${err}`;
     });
   });
 
@@ -346,7 +360,6 @@ async function init() {
     }
   });
 
-  checkForUpdate();
   initProviderTip();
   await refresh();
 }

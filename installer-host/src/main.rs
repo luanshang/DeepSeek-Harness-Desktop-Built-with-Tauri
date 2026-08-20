@@ -13,7 +13,7 @@ const DETACHED_PROCESS: u32 = 0x00000008;
 use tauri::{AppHandle, Emitter, WebviewWindow};
 
 const PRODUCT: &str = "DeepSeek Harness Desktop";
-const VERSION: &str = "1.4.9";
+const VERSION: &str = "1.5.0";
 
 // `scripts/build-installer.mjs` replaces this payload before compiling us.
 static PAYLOAD: &[u8] = include_bytes!(concat!(env!("OUT_DIR"), "/payload.exe"));

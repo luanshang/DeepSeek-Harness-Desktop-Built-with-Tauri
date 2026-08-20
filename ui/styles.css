@@ -166,6 +166,14 @@ body {
   transform: translateY(-4px);
 }
 
+/* Keep the update notice unobtrusive near the lower-right settings area. */
+#update-banner {
+  position: fixed;
+  right: 18px;
+  bottom: 18px;
+  z-index: 999997;
+}
+
 #traffic-lights {
   transform: translateY(-4px);
 }
@@ -343,36 +351,72 @@ body.harness-running #content {
 
 .log.hidden { display: none; }
 
-/* ── update banner ─────────────────────────────────────────────────── */
-
-.update-banner {
+/* ── update dialog ──────────────────────────────────────────────────── */
+#update-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 1000000;
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 12px;
-  padding: 10px 16px;
-  background: var(--accent-tint-bg);
+  background: rgba(8, 18, 32, 0.28);
+  backdrop-filter: blur(3px);
+}
+
+#update-overlay.hidden { display: none; }
+
+#update-dialog {
+  width: min(360px, calc(100vw - 40px));
+  padding: 22px;
+  background: var(--card);
+  color: var(--text);
+  border: 1px solid var(--card-border);
+  border-radius: 14px;
+  box-shadow: 0 14px 38px rgba(18, 38, 68, 0.22);
+}
+
+#update-dialog h2 { margin: 0 0 10px; font-size: 18px; }
+#update-dialog-text { margin-bottom: 20px; }
+.update-dialog-actions { display: flex; justify-content: flex-end; gap: 8px; }
+
+/* ── legacy update banner styles ───────────────────────────────────── */
+
+.update-banner {
+  position: fixed;
+  right: 18px;
+  bottom: 18px;
+  z-index: 999997;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-left: 4px;
+  padding: 3px 6px 3px 10px;
+  background: color-mix(in srgb, var(--accent-tint-bg) 88%, transparent);
   color: var(--accent-tint-text);
-  font-size: 14px;
-  border-radius: 10px;
-  margin-bottom: 16px;
-  width: 100%;
-  max-width: 520px;
+  font-size: 12px;
+  line-height: 1;
+  border: 1px solid color-mix(in srgb, var(--accent) 20%, transparent);
+  border-radius: 7px;
+  white-space: nowrap;
+  box-shadow: 0 1px 4px rgba(25, 55, 100, 0.08);
 }
 
 .update-banner.hidden { display: none; }
 
-.update-actions { display: flex; gap: 6px; }
+.update-actions { display: flex; align-items: center; gap: 4px; }
 .update-actions button {
-  padding: 5px 14px;
+  padding: 3px 7px;
   border: 1px solid currentColor;
-  border-radius: 6px;
+  border-radius: 5px;
   background: transparent;
   color: inherit;
   font: inherit;
-  font-size: 13px;
+  font-size: 11px;
   cursor: pointer;
+  transition: filter 120ms ease, transform 120ms ease;
 }
+.update-actions button:hover { filter: brightness(0.92); }
+.update-actions button:active { transform: scale(0.97); }
 .update-actions .primary { background: var(--accent); color: #fff; border: none; }
 
 /* ── provider tip ──────────────────────────────────────────────────── */

@@ -662,6 +662,10 @@ fn handle_menu_action(app: &AppHandle, id: &str) {
             let app2 = app.clone();
             thread::spawn(move || server::restart(&app2, &srv));
         }
+        menu::MENU_STOP => {
+            server::stop(app, &state.server);
+            server::set_stopped(app, &state.server);
+        }
         menu::MENU_OPEN_DATA_DIR => {
             let home = server::dsh_home_dir(app);
             let _ = std::fs::create_dir_all(&home);

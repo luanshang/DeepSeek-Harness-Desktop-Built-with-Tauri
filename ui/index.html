@@ -39,8 +39,10 @@
             <div id="app-menu" class="app-menu hidden" role="menu">
               <button class="app-menu-item" data-menu-id="open_browser" role="menuitem">在浏览器中打开</button>
               <button class="app-menu-item" data-menu-id="restart" role="menuitem">重启服务</button>
+               <button class="app-menu-item" data-menu-id="stop" role="menuitem">停止服务</button>
               <button class="app-menu-item" data-menu-id="open_data_dir" role="menuitem">打开数据目录</button>
               <button class="app-menu-item" data-menu-id="connection_settings" role="menuitem">连接设置</button>
+               <button class="app-menu-item" data-menu-id="check_update" role="menuitem">检查更新</button>
               <div class="app-menu-sep"></div>
               <button class="app-menu-item" data-menu-id="toggle_autostart" role="menuitemcheckbox">
                 <svg class="icon app-menu-check hidden"><use href="#icon-check"></use></svg>
@@ -56,14 +58,6 @@
       <div id="menu-dismiss-layer" class="hidden" aria-hidden="true"></div>
       <div id="shell-body">
         <div id="content">
-          <div id="update-banner" class="update-banner hidden">
-            <span id="update-text"></span>
-            <div class="update-actions">
-              <button id="btn-update-install" class="primary">立即更新</button>
-              <button id="btn-update-dismiss">忽略</button>
-            </div>
-          </div>
-
           <section id="state-starting" class="card hidden">
             <div class="boot-logo" aria-hidden="true">
               <svg viewBox="0 0 50 50" width="64" height="64" fill="none" stroke="currentColor" stroke-width="2">
@@ -101,6 +95,17 @@
           <iframe id="harness-frame" class="hidden" title="DeepSeek Harness" allow="clipboard-read *; clipboard-write *"></iframe>
         </div>
       </div>
+    </div>
+
+    <div id="update-overlay" class="hidden" role="presentation">
+      <section id="update-dialog" role="dialog" aria-modal="true" aria-labelledby="update-dialog-title">
+        <h2 id="update-dialog-title">发现新版本</h2>
+        <p id="update-dialog-text" class="muted"></p>
+        <div class="update-dialog-actions">
+          <button id="btn-update-dialog-cancel">稍后</button>
+          <button id="btn-update-dialog-install" class="primary">立即更新</button>
+        </div>
+      </section>
     </div>
 
     <div id="connection-settings-overlay" class="hidden" role="presentation">

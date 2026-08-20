@@ -482,6 +482,43 @@ pub(crate) fn kill_process_tree(pid: u32) {
     }
 }
 
+/// Windows fallback for dsh processes that survived without a runtime lock.
+/// Discover listeners from the OS TCP table, equivalent to
+/// Get-NetTCPConnection -LocalPort <port> -State Listen, then terminate their
+/// process trees. This is only used by explicit stop/restart/quit paths.
+#[cfg(windows)]
+fn kill_listeners_on_port(port: u16, server: &Shared) {
+    let mut netstat = Command::new("netstat");
+    netstat.args(["-ano", "-p", "tcp"]);
+    hide_console(&mut netstat);
+    let Ok(output) = netstat.output() else { return };
+    let text = String::from_utf8_lossy(&output.stdout);
+    let suffix = format!(":{port}");
+    let mut pids = Vec::new();
+    for line in text.lines() {
+        let fields: Vec<&str> = line.split_whitespace().collect();
+        if fields.len() < 5 || fields[0] != "TCP" || fields[3] != "LISTENING" {
+            continue;
+        }
+        let local = fields[1].trim_matches(['[', ']']);
+        if !local.ends_with(&suffix) {
+            continue;
+        }
+        if let Ok(pid) = fields[4].parse::<u32>() {
+            if pid != std::process::id() && !pids.contains(&pid) {
+                pids.push(pid);
+            }
+        }
+    }
+    for pid in pids {
+        push_log(server, format!("清理端口 {port} 的残留监听进程 pid {pid}…"));
+        kill_process_tree(pid);
+    }
+}
+
+#[cfg(not(windows))]
+fn kill_listeners_on_port(_port: u16, _server: &Shared) {}
+
 // ── resolution ───────────────────────────────────────────────────────────────
 
 fn resolve_node(app: &AppHandle) -> Result<String, String> {
@@ -934,11 +971,11 @@ fn spawn(app: &AppHandle, server: &Shared, node: &str, bin: &str, port: u16) -> 
 
     push_log(
         server,
-        format!("启动: {node} {bin} web --port {port}  (cwd: {cwd_plain})"),
+        format!("启动: {node} {bin} web --no-open --port {port}  (cwd: {cwd_plain})"),
     );
 
     let mut cmd = Command::new(node);
-    cmd.arg(bin).arg("web").arg("--port").arg(port.to_string());
+    cmd.arg(bin).arg("web").arg("--no-open").arg("--port").arg(port.to_string());
     cmd.current_dir(&cwd_plain);
     // See `effective_path`: every tool call dsh shells out to on the
     // agent's behalf inherits this, so a stale/truncated PATH here doesn't
@@ -1089,13 +1126,25 @@ fn spawn(app: &AppHandle, server: &Shared, node: &str, bin: &str, port: u16) -> 
 
 /// Stop the server: mark requested, then kill the whole process tree.
 pub fn stop(app: &AppHandle, server: &Shared) {
+    // Include the persisted runtime-lock PID. This covers a dsh child adopted
+    // after the previous desktop process disappeared, and also covers the
+    // short window where the watcher has not yet copied the PID into state.
+    let lock_pid = read_runtime_lock(app).map(|lock| lock.child_pid);
     let (pid, install_pid) = {
         let mut s = server.lock().unwrap();
         s.requested_stop = true;
         (s.pid.take(), s.install_pid.take())
     };
     clear_runtime_lock(app);
-    if let Some(pid) = pid {
+    let mut pids = Vec::new();
+    for candidate in [pid, lock_pid] {
+        if let Some(candidate) = candidate {
+            if !pids.contains(&candidate) {
+                pids.push(candidate);
+            }
+        }
+    }
+    for pid in pids {
         println!("[dsh-desktop] stopping dsh pid {pid} (process tree)");
         kill_process_tree(pid);
     }
@@ -1103,6 +1152,10 @@ pub fn stop(app: &AppHandle, server: &Shared) {
         println!("[dsh-desktop] stopping runtime install pid {pid}");
         kill_process_tree(pid);
     }
+    // Also clean a dsh listener that survived without a runtime lock. This is
+    // what makes explicit Stop/Restart/Quit reliable after a crash or forced
+    // termination of the desktop shell.
+    kill_listeners_on_port(default_port(), server);
 }
 
 /// Stop the current server, then start fresh. Blocks briefly (this is meant
@@ -1206,12 +1259,21 @@ pub fn start(app: &AppHandle, server: &Shared) -> Result<(), String> {
 
 fn start_inner(app: &AppHandle, server: &Shared) -> Result<(), String> {
     // Adopt a surviving child from a previous desktop process before probing
-    // the usual port. The URL is only recorded after that child reported ready,
-    // so a successful probe is enough to avoid a second ~/.dsh writer.
+    // the usual port. Keep its PID in the current state: without this, the
+    // service is visible in the UI but stop/quit cannot kill the adopted child,
+    // leaving an orphan listening on 3080.
     if let Some(lock) = read_runtime_lock(app) {
         if let Some(url) = lock.url.as_deref() {
             if probe_dsh_with_retries(url, 2, 250) {
-                push_log(server, format!("接管仍在运行的 dsh 服务：{url}"));
+                let child_pid = lock.child_pid;
+                push_log(server, format!("接管仍在运行的 dsh 服务：{url} (pid {child_pid})"));
+                {
+                    let mut state = server.lock().unwrap();
+                    state.pid = Some(child_pid);
+                    state.requested_stop = false;
+                    state.node = None;
+                    state.bin = None;
+                }
                 set_running(app, server, url);
                 return Ok(());
             }
