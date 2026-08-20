@@ -8,7 +8,7 @@
     "dev": "tauri dev",
     "build": "tauri build",
     "pack": "tauri build --no-bundle",
-    "bundle": "npm run fetch:node && npm run prepare:runtime && node scripts/build-installer.mjs",
+    "bundle": "npm run fetch:node && npm run prepare:runtime && node scripts/build-installer.mjs && node scripts/sign-and-prepare-release.mjs",
     "build:installer": "node scripts/build-installer.mjs",
     "fetch:node": "node scripts/fetch-node.mjs",
     "prepare:runtime": "node scripts/prepare-runtime.mjs",

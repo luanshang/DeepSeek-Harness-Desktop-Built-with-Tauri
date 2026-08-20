@@ -41,33 +41,42 @@ npm run check:dsh-version
 
 > 注意两条独立的版本轴线：这里升的是**外壳版本**（自动更新只认它），和内置 dsh 运行时的版本互不相干，别混。
 
-### 3. 构建安装包
+### 3. 构建、签名并生成更新清单
 
-```powershell
-npm install
-npm run bundle    # = fetch:node → prepare:runtime → 构建 NSIS 安装器
-```
-
-产物：`src-tauri/target/release/bundle/nsis/DeepSeek Harness Desktop_<版本>_x64-setup.exe`
-
-### 4. 签名安装包
+先在当前 PowerShell 会话设置私钥密码：
 
 ```powershell
 $env:TAURI_SIGNING_PRIVATE_KEY_PASSWORD = "你的私钥密码"
-npm run tauri -- signer sign --private-key-path "$env:USERPROFILE\.tauri\dsh-desktop.key" "src-tauri\target\release\bundle\nsis\DeepSeek Harness Desktop_<版本>_x64-setup.exe"
 ```
 
-> 注意：`--private-key-path` 才是"私钥文件路径"；`-k` / `--private-key` 收的是**密钥字符串本身**（base64 内容，通常由 `TAURI_SIGNING_PRIVATE_KEY` 环境变量提供），直接传文件路径会报
-> `failed to decode base64 secret key: Invalid symbol ...`。
-
-在 exe 同目录生成 `<exe>.sig`。
-
-### 5. 生成更新清单 latest.json（放在仓库根目录）
+然后执行一条命令：
 
 ```powershell
-node scripts/build-latest-json.mjs <版本> v<版本>
-# 例：node scripts/build-latest-json.mjs 1.5.0 v1.5.0
+npm install
+npm run bundle
 ```
+
+`npm run bundle` 会依次执行：
+
+1. 准备 Node 和内置 dsh 运行时；
+2. 构建 NSIS 安装器；
+3. 使用 `~/.tauri/dsh-desktop.key` 自动生成 `.exe.sig`；
+4. 自动生成仓库根目录的 `latest.json`。
+
+如私钥不在默认位置，可设置：
+
+```powershell
+$env:TAURI_SIGNING_PRIVATE_KEY_PATH = "D:\secure\dsh-desktop.key"
+$env:DSH_RELEASE_TAG = "v1.5.0" # 默认自动使用 v<package.json version>
+```
+
+最终产物：
+
+- `src-tauri/target/release/bundle/nsis/DeepSeek Harness Desktop_<版本>_x64-setup.exe`
+- 同目录的 `.exe.sig`
+- 仓库根目录的 `latest.json`
+
+脚本拒绝在未设置 `TAURI_SIGNING_PRIVATE_KEY_PASSWORD` 时签名，避免构建过程中出现交互式密码输入。
 
 ### 6. 提交并打 tag
 
