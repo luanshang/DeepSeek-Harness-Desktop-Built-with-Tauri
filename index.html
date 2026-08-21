@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DeepSeek Harness Desktop</title>
+  <meta name="description" content="一个 macOS 标题栏风格的 DeepSeek Harness 桌面端，直接连接 WebUI，复用网页版数据。">
+  <link rel="stylesheet" href="/DeepSeek-Harness-Desktop-Built-with-Tauri/css/style.css">
+  <link rel="icon" href="https://github.com/luanshang/DeepSeek-Harness-Desktop-Built-with-Tauri/raw/main/src-tauri/icons/deepseek.png" type="image/png">
+</head>
+<body>
+<header class="site-header"><div class="container">
+  <a href="/DeepSeek-Harness-Desktop-Built-with-Tauri/" class="logo"><span class="logo-text">DSH Desktop</span></a>
+  <nav class="main-nav">
+    <a href="https://github.com/luanshang/DeepSeek-Harness-Desktop-Built-with-Tauri" target="_blank" rel="noopener">GitHub</a>
+    <a href="#features">功能</a><a href="#screenshots">截图</a><a href="#download">下载</a>
+    <a href="https://github.com/luanshang/DeepSeek-Harness-Desktop-Built-with-Tauri/releases/latest" class="nav-download" target="_blank" rel="noopener">⬇️ 下载</a>
+  </nav>
+</div></header>
+<main>
+  <section class="hero hero-shell">
+    <div class="hero-orbit hero-orbit-one"></div><div class="hero-orbit hero-orbit-two"></div>
+    <div class="hero-copy">
+      <p class="eyebrow"><span class="status-dot"></span> DEEPSEEK HARNESS · DESKTOP EDITION</p>
+      <h1>让每一次<br><em>智能协作</em>都更接近桌面。</h1>
+      <p class="hero-lead">一个 macOS 标题栏风格的 DeepSeek Harness 桌面端。直接连接 WebUI，复用网页版数据，让 Harness 从浏览器标签页变成你的日常工作空间。</p>
+      <div class="hero-actions"><a href="https://github.com/luanshang/DeepSeek-Harness-Desktop-Built-with-Tauri/releases/latest" class="btn btn-primary">下载 Windows 版 <span>↗</span></a><a href="https://github.com/luanshang/DeepSeek-Harness-Desktop-Built-with-Tauri" class="btn btn-quiet">查看 GitHub <span>↗</span></a></div>
+      <p class="hero-meta">Windows x64 · Tauri + Rust · MIT License</p>
+    </div>
+    <div class="hero-window"><div class="window-chrome"><span class="traffic traffic-red"></span><span class="traffic traffic-yellow"></span><span class="traffic traffic-green"></span><span class="window-title">DeepSeek Harness Desktop</span></div><img src="/DeepSeek-Harness-Desktop-Built-with-Tauri/images/app-running.png" alt="DeepSeek Harness Desktop 主界面"></div>
+  </section>
+
+  <section class="manifesto"><p class="section-kicker">A BETTER PLACE TO WORK</p><h2>浏览器只是入口。<br><span>桌面才是工作流。</span></h2><p>DeepSeek Harness Desktop 将官方 WebUI 放进一个轻量、专注的桌面外壳。关掉窗口不等于退出，数据与网页版保持一致，常用工具始终在手边。</p></section>
+
+  <h2 id="features" class="section-title">为真正的工作而设计。</h2>
+  <div class="features-grid">
+    <div class="feature-card feature-wide"><div class="feature-number">01</div><div><h3>打开即工作</h3><p>应用自动准备后台服务，不需要敲命令行，也不需要理解端口。双击图标，回到上一次离开的地方。</p></div></div>
+    <div class="feature-card"><div class="feature-number">02</div><h3>WebUI 直连</h3><p>直接连接你的 WebUI 地址，桌面端与网页版使用同一套会话和配置，无需担忧环境不一致。</p></div>
+    <div class="feature-card"><div class="feature-number">03</div><h3>安静地留在托盘</h3><p>关闭窗口只是收起，服务仍在后台运行。需要时一键唤回，真正退出只需从托盘选择 Quit。</p></div>
+    <div class="feature-card feature-accent"><div class="feature-number">04</div><h3>文件、终端、插件</h3><p>文件面板、内置终端和插件市场集中在右侧 dock。安装插件前先确认确切命令，始终保持透明。</p></div>
+    <div class="feature-card"><div class="feature-number">05</div><h3>稳定地运行</h3><p>后台服务异常退出时自动恢复；启动失败时给出明确原因，而不是留下一片空白。</p></div>
+    <div class="feature-card"><div class="feature-number">06</div><h3>轻量且快速</h3><p>使用系统 WebView2，不额外捆绑完整 Chromium。小体积、快启动，专注于真正的 Harness 体验。</p></div>
+  </div>
+
+  <section class="showcase" id="screenshots"><div class="showcase-copy"><p class="section-kicker">MADE FOR FOCUS</p><h2>少一点打扰，<br><span>多一点专注。</span></h2><p>从安装到第一次启动，整个过程都保持清晰、克制。安装程序采用向导式界面，选择目录后即可完成。</p></div><div class="showcase-image showcase-installer"><img src="/DeepSeek-Harness-Desktop-Built-with-Tauri/images/app-installer.png" alt="DeepSeek Harness Desktop 安装器"><span class="image-label">INSTALLER / 01</span></div><div class="showcase-image showcase-boot"><img src="/DeepSeek-Harness-Desktop-Built-with-Tauri/images/app-boot.png" alt="DeepSeek Harness Desktop 启动页"><span class="image-label">BOOT / 02</span></div><div class="showcase-image showcase-running"><img src="/DeepSeek-Harness-Desktop-Built-with-Tauri/images/app-running.png" alt="DeepSeek Harness Desktop 工作界面"><span class="image-label">WORKSPACE / 03</span></div></section>
+
+  <section class="download-panel" id="download"><div><p class="section-kicker">START FROM HERE</p><h2>把 Harness<br><span>带到桌面。</span></h2><p>当前提供 Windows x64 安装包。安装后，应用会自动准备运行环境，并支持从应用内接收后续更新。</p></div><div class="download-action"><a href="https://github.com/luanshang/DeepSeek-Harness-Desktop-Built-with-Tauri/releases/latest" class="btn btn-primary btn-large">前往 Releases <span>↗</span></a><small>Windows 10/11 · x64 · 免费开源</small></div></section>
+
+  <section class="faq-section" id="faq"><p class="section-kicker">QUESTIONS</p><h2>常见问题</h2><div class="faq-grid"><div><h3>这是官方产品吗？</h3><p>不是。DeepSeek Harness 本体由官方团队维护，本项目是社区制作的第三方桌面封装。</p></div><div><h3>我的数据会被复制吗？</h3><p>不会。桌面端连接同一 WebUI，沿用原有的 Harness 数据和配置。文件面板是独立的本地能力。</p></div><div><h3>为什么第一次启动需要联网？</h3><p>应用会准备 dsh 运行时。准备完成后会使用本地缓存；模型服务是否联网取决于你的配置。</p></div><div><h3>如何参与开发？</h3><p>项目采用 MIT License，欢迎通过 GitHub 阅读源码、提交 Issue 或 Pull Request。</p></div></div></section>
+</main>
+<footer class="site-footer"><div class="container"><div class="footer-content"><div class="footer-info"><p>DeepSeek Harness Desktop — 社区第三方封装，DeepSeek Harness 本体由官方维护。</p></div><div class="footer-links"><a href="https://github.com/luanshang/DeepSeek-Harness-Desktop-Built-with-Tauri" target="_blank" rel="noopener">GitHub</a><span class="sep">·</span><a href="https://github.com/luanshang/DeepSeek-Harness-Desktop-Built-with-Tauri/blob/main/LICENSE" target="_blank" rel="noopener">MIT License</a><span class="sep">·</span><a href="https://github.com/luanshang/DeepSeek-Harness-Desktop-Built-with-Tauri#readme" target="_blank" rel="noopener">README</a></div><p class="footer-copy">© 2026 luanshang</p></div></div></footer>
+</body>
+</html>
