@@ -19,6 +19,14 @@ const els = {
   updateDialogText: document.getElementById("update-dialog-text"),
   btnUpdateDialogInstall: document.getElementById("btn-update-dialog-install"),
   btnUpdateDialogCancel: document.getElementById("btn-update-dialog-cancel"),
+  aboutOverlay: document.getElementById("about-overlay"),
+  aboutClose: document.getElementById("btn-about-close"),
+  aboutVersion: document.getElementById("about-version"),
+  btnAboutGithub: document.getElementById("btn-about-github"),
+  btnAboutCheckUpdate: document.getElementById("btn-about-check-update"),
+  aboutUpdateStatus: document.getElementById("about-update-status"),
+  aboutUpdateSpinner: document.getElementById("about-update-spinner"),
+  aboutUpdateLabel: document.getElementById("about-update-label"),
   providerTip: document.getElementById("provider-tip"),
   btnProviderTipDismiss: document.getElementById("btn-provider-tip-dismiss"),
   toolbar: document.getElementById("toolbar"),
@@ -26,8 +34,8 @@ const els = {
   btnWinMinimize: document.getElementById("btn-win-minimize"),
   btnWinMaximize: document.getElementById("btn-win-maximize"),
   btnWinClose: document.getElementById("btn-win-close"),
-  btnAppMenu: document.getElementById("btn-app-menu"),
-  appMenu: document.getElementById("app-menu"),
+  toolbarMenuButtons: document.querySelectorAll(".toolbar-menu-btn"),
+  toolbarDropdowns: document.querySelectorAll(".toolbar-dropdown"),
   menuDismissLayer: document.getElementById("menu-dismiss-layer"),
   connectionSettingsOverlay: document.getElementById("connection-settings-overlay"),
   connectionSettingsClose: document.getElementById("btn-connection-settings-close"),
@@ -40,6 +48,25 @@ const els = {
 };
 
 const PROVIDER_TIP_DISMISSED_KEY = "dsh-desktop-provider-tip-dismissed";
+
+// Dialog controls also use delegated handlers so a malformed/slowly hydrated
+// view cannot make the About actions inert in a packaged WebView2 build.
+document.addEventListener("click", (event) => {
+  const target = event.target.closest?.("button");
+  if (!target) return;
+  if (target.id === "btn-about-close") {
+    event.preventDefault();
+    closeAboutDialog();
+  } else if (target.id === "btn-about-github") {
+    event.preventDefault();
+    invoke("open_github_repository").catch(() => {
+      window.open("https://github.com/luanshang/DeepSeek-Harness-Desktop-Built-with-Tauri", "_blank");
+    });
+  } else if (target.id === "btn-about-check-update") {
+    event.preventDefault();
+    checkForUpdate(els.aboutUpdateStatus);
+  }
+});
 
 function initProviderTip() {
   if (localStorage.getItem(PROVIDER_TIP_DISMISSED_KEY)) return;
@@ -122,43 +149,64 @@ async function refresh() {
   }
 }
 
+// ── about dialog ─────────────────────────────────────────────────────
+
+async function openAboutDialog() {
+  els.aboutOverlay.classList.remove("hidden");
+  try {
+    els.aboutVersion.textContent = await invoke("get_app_version");
+  } catch {
+    els.aboutVersion.textContent = "未知";
+  }
+}
+
+function closeAboutDialog() {
+  els.aboutOverlay.classList.add("hidden");
+}
+
 // ── app menu ────────────────────────────────────────────────────────
 
-function isAppMenuOpen() {
-  return !els.appMenu.classList.contains("hidden");
-}
-
-async function openAppMenu() {
-  let enabled = false;
-  try {
-    enabled = await invoke("get_autostart_enabled");
-  } catch { /* leave unchecked */ }
-  els.appMenu.querySelector(".app-menu-check").classList.toggle("hidden", !enabled);
-  els.appMenu.classList.remove("hidden");
-  els.menuDismissLayer.classList.remove("hidden");
-  els.btnAppMenu.setAttribute("aria-expanded", "true");
-}
-
-function closeAppMenu() {
-  els.appMenu.classList.add("hidden");
+function closeToolbarMenus() {
+  for (const menu of els.toolbarDropdowns) menu.classList.add("hidden");
   els.menuDismissLayer.classList.add("hidden");
-  els.btnAppMenu.setAttribute("aria-expanded", "false");
+  for (const button of els.toolbarMenuButtons) button.setAttribute("aria-expanded", "false");
+}
+
+async function openToolbarMenu(button) {
+  const menu = document.getElementById(button.dataset.toolbarMenu);
+  if (!menu) return;
+  const willOpen = menu.classList.contains("hidden");
+  closeToolbarMenus();
+  if (!willOpen) return;
+  if (button.dataset.toolbarMenu === "service-menu") {
+    try {
+      const enabled = await invoke("get_autostart_enabled");
+      menu.querySelector(".app-menu-check")?.classList.toggle("hidden", !enabled);
+    } catch { /* leave unchecked */ }
+  }
+  menu.classList.remove("hidden");
+  els.menuDismissLayer.classList.remove("hidden");
+  button.setAttribute("aria-expanded", "true");
 }
 
 function initAppMenu() {
-  els.menuDismissLayer.addEventListener("click", closeAppMenu);
-  els.btnAppMenu.addEventListener("click", (event) => {
-    event.stopPropagation();
-    if (isAppMenuOpen()) { closeAppMenu(); } else { openAppMenu(); }
-  });
-  for (const item of els.appMenu.querySelectorAll(".app-menu-item")) {
+  els.menuDismissLayer.addEventListener("click", closeToolbarMenus);
+  for (const button of els.toolbarMenuButtons) {
+    button.addEventListener("click", (event) => {
+      event.stopPropagation();
+      openToolbarMenu(button);
+    });
+  }
+  for (const item of document.querySelectorAll(".app-menu-action")) {
     item.addEventListener("click", () => {
       const id = item.dataset.menuId;
-      closeAppMenu();
+      closeToolbarMenus();
       if (id === "connection_settings") {
         openConnectionSettings();
       } else if (id === "check_update") {
         checkForUpdate();
+      } else if (id === "about") {
+        openAboutDialog();
       } else if (id === "stop") {
         invoke("stop_server").catch((err) => {
           show("error");
@@ -168,8 +216,8 @@ function initAppMenu() {
         show("starting");
         els.startingDetail.textContent = "正在重启本地服务…";
         invoke("restart_server").catch((err) => {
-          show("error");
-          els.errorMessage.textContent = `重启失败: ${err}`;
+          refresh();
+          window.alert(`重启失败：${err}`);
         });
       } else {
         invoke("trigger_menu_action", { id }).catch((err) => {
@@ -179,10 +227,10 @@ function initAppMenu() {
     });
   }
   document.addEventListener("click", (event) => {
-    if (isAppMenuOpen() && !els.appMenu.contains(event.target)) closeAppMenu();
+    if (!event.target.closest("#toolbar-menus")) closeToolbarMenus();
   });
   document.addEventListener("keydown", (event) => {
-    if (event.key === "Escape" && isAppMenuOpen()) closeAppMenu();
+    if (event.key === "Escape") closeToolbarMenus();
   });
 }
 
@@ -297,17 +345,48 @@ window.addEventListener("message", (event) => {
 
 // ── init ────────────────────────────────────────────────────────────
 
-async function checkForUpdate() {
+async function checkForUpdate(statusTarget = null) {
+  const fromAbout = Boolean(statusTarget);
+  if (fromAbout) {
+    els.btnAboutCheckUpdate.disabled = true;
+    els.aboutUpdateSpinner.classList.remove("hidden");
+    els.aboutUpdateLabel.textContent = "检查中…";
+    statusTarget.textContent = "正在连接更新服务器…";
+    statusTarget.className = "about-update-status is-loading";
+  }
+  const timeout = new Promise((_, reject) => {
+    setTimeout(() => reject(new Error("检查更新超时，请检查网络连接")), 15000);
+  });
   try {
-    const update = await invoke("check_for_update");
+    const update = await Promise.race([invoke("check_for_update"), timeout]);
     if (!update) {
-      window.alert("当前已是最新版本");
+      if (fromAbout) {
+        statusTarget.textContent = "当前已是最新版本";
+        statusTarget.className = "about-update-status is-success";
+      } else {
+        window.alert("当前已是最新版本");
+      }
       return;
+    }
+    if (fromAbout) {
+      statusTarget.textContent = `发现新版本 ${update.version}`;
+      statusTarget.className = "about-update-status is-success";
     }
     els.updateDialogText.textContent = `发现新版本 ${update.version}，是否立即更新？`;
     els.updateOverlay.classList.remove("hidden");
   } catch (err) {
-    window.alert(`检查更新失败：${err}`);
+    if (fromAbout) {
+      statusTarget.textContent = `检查失败：${err.message || err}`;
+      statusTarget.className = "about-update-status is-error";
+    } else {
+      window.alert(`检查更新失败：${err}`);
+    }
+  } finally {
+    if (fromAbout) {
+      els.btnAboutCheckUpdate.disabled = false;
+      els.aboutUpdateSpinner.classList.add("hidden");
+      els.aboutUpdateLabel.textContent = "重新检查更新";
+    }
   }
 }
 
@@ -331,7 +410,8 @@ async function init() {
   els.btnRestart.addEventListener("click", () => {
     els.btnRestart.disabled = true;
     invoke("restart_server").catch((err) => {
-      els.errorMessage.textContent = `重启失败: ${err}`;
+      refresh();
+      window.alert(`重启失败：${err}`);
     }).finally(() => { els.btnRestart.disabled = false; });
   });
   els.btnLogs.addEventListener("click", toggleLogs);
@@ -341,6 +421,10 @@ async function init() {
   els.btnUpdateDialogCancel.addEventListener("click", () => {
     els.updateOverlay.classList.add("hidden");
   });
+  els.aboutOverlay.addEventListener("click", (event) => {
+    if (event.target === els.aboutOverlay) closeAboutDialog();
+  });
+
   els.btnUpdateDialogInstall.addEventListener("click", () => {
     els.btnUpdateDialogInstall.disabled = true;
     els.btnUpdateDialogInstall.textContent = "正在更新…";
@@ -357,6 +441,12 @@ async function init() {
     if (e.key !== "Escape") return;
     if (!els.connectionSettingsOverlay.classList.contains("hidden")) {
       closeConnectionSettings();
+    }
+    if (!els.aboutOverlay.classList.contains("hidden")) {
+      closeAboutDialog();
+    }
+    if (!els.updateOverlay.classList.contains("hidden")) {
+      els.updateOverlay.classList.add("hidden");
     }
   });
 

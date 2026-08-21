@@ -161,6 +161,13 @@ fn start_server(app: AppHandle, state: State<'_, AppState>) -> Result<(), String
 
 #[tauri::command]
 fn restart_server(app: AppHandle, state: State<'_, AppState>) -> Result<(), String> {
+    let settings = server::load_settings(&app);
+    if settings.connection_mode == "connect" {
+        return Err(
+            "当前为固定地址模式，桌面端不会重启外部服务。请切换到智能模式，或在启动 dsh 的终端中重启它。"
+                .to_string(),
+        );
+    }
     let srv = state.server.clone();
     thread::spawn(move || server::restart(&app, &srv));
     Ok(())
@@ -197,6 +204,18 @@ fn get_autostart_enabled(app: AppHandle) -> bool {
     app.autolaunch().is_enabled().unwrap_or(false)
 }
 
+#[tauri::command]
+fn get_app_version(app: AppHandle) -> String {
+    app.package_info().version.to_string()
+}
+
+#[tauri::command]
+fn open_github_repository(app: AppHandle) -> Result<(), String> {
+    app.opener()
+        .open_url("https://github.com/luanshang/DeepSeek-Harness-Desktop-Built-with-Tauri", None::<&str>)
+        .map_err(|e| e.to_string())
+}
+
 /// Lets the in-window hamburger menu (Windows/Linux have no native menu bar —
 /// see `set_menu()`'s macOS-only gate in `run()`) fire the exact same actions
 /// as the tray menu, through the one dispatcher both already share.
@@ -211,16 +230,17 @@ struct UpdateInfo {
     body: Option<String>,
 }
 
-/// Checks the configured updater endpoint for a newer shell release. Returns
-/// `None` if the current version is already the latest (or the check
-/// failed — network errors here shouldn't block the app from starting).
+/// Checks the configured updater endpoint for a newer shell release. A
+/// network or manifest error is returned to the About dialog instead of being
+/// silently treated as "already up to date".
 #[tauri::command]
-async fn check_for_update(app: AppHandle) -> Option<UpdateInfo> {
-    let update = app.updater().ok()?.check().await.ok()??;
-    Some(UpdateInfo {
+async fn check_for_update(app: AppHandle) -> Result<Option<UpdateInfo>, String> {
+    let updater = app.updater().map_err(|e| e.to_string())?;
+    let update = updater.check().await.map_err(|e| e.to_string())?;
+    Ok(update.map(|update| UpdateInfo {
         version: update.version,
         body: update.body,
-    })
+    }))
 }
 
 /// Re-checks for an update and, if one is still available, downloads,
@@ -779,6 +799,8 @@ pub fn run() {
             open_in_browser,
             open_data_dir,
             get_autostart_enabled,
+            get_app_version,
+            open_github_repository,
             trigger_menu_action,
             check_for_update,
             install_update,

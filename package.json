@@ -1,7 +1,7 @@
 {
   "name": "deepseek-harness-desktop",
   "private": true,
-  "version": "1.5.0",
+  "version": "1.5.1",
   "description": "DeepSeek Harness Desktop, built with Tauri (Tauri wrapper around `dsh web`)",
   "scripts": {
     "tauri": "tauri",

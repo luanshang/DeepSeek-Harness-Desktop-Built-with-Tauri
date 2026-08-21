@@ -36,7 +36,7 @@ cpSync(payloadSource, payload, { force: true });
 // Compile the separate WebView2/Tauri CSS bootstrapper. Its Rust binary embeds
 // installer/payload.exe at compile time, so the setup file is self-contained.
 mkdirSync(join(hostRoot, "icons"), { recursive: true });
-cpSync(join(root, "src-tauri", "icons", "icon.ico"), join(hostRoot, "icons", "icon.ico"), { force: true });
+cpSync(join(root, "src-tauri", "icons", "deepseek.ico"), join(hostRoot, "icons", "deepseek.ico"), { force: true });
 run("cargo", ["build", "--release", "--manifest-path", hostManifest]);
 const hostExe = join(root, "installer-host", "target", "release", "dsh-installer.exe");
 if (!existsSync(hostExe)) throw new Error(`Installer host was not generated: ${hostExe}`);

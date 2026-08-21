@@ -22,6 +22,9 @@
         <polyline points="7 10 12 15 17 10"></polyline>
         <line x1="12" y1="15" x2="12" y2="3"></line>
       </symbol>
+      <symbol id="icon-github" viewBox="0 0 24 24" fill="currentColor">
+        <path d="M12 .5a12 12 0 0 0-3.79 23.39c.6.11.82-.26.82-.58v-2.05c-3.34.73-4.04-1.61-4.04-1.61-.55-1.39-1.34-1.76-1.34-1.76-1.09-.75.08-.74.08-.74 1.2.08 1.84 1.23 1.84 1.23 1.07 1.83 2.8 1.3 3.48.99.11-.78.42-1.3.76-1.6-2.67-.3-5.47-1.34-5.47-5.95 0-1.31.47-2.38 1.24-3.22-.13-.3-.54-1.52.12-3.17 0 0 1.01-.32 3.3 1.23a11.5 11.5 0 0 1 6 0c2.29-1.55 3.3-1.23 3.3-1.23.66 1.65.25 2.87.12 3.17.77.84 1.24 1.91 1.24 3.22 0 4.62-2.81 5.64-5.49 5.94.43.37.81 1.1.81 2.22v3.29c0 .32.22.7.83.58A12 12 0 0 0 12 .5Z"></path>
+      </symbol>
     </svg>
 
     <div id="app-shell">
@@ -31,29 +34,39 @@
           <button id="btn-win-minimize" class="traffic-dot dot-min" title="最小化" aria-label="最小化"></button>
           <button id="btn-win-maximize" class="traffic-dot dot-max" title="最大化" aria-label="最大化"></button>
         </div>
-        <div id="toolbar-left">
-          <div id="app-menu-wrap">
-            <button id="btn-app-menu" class="toolbar-btn" title="菜单" aria-haspopup="true" aria-expanded="false">
-              <svg class="icon"><use href="#icon-menu"></use></svg>
-            </button>
-            <div id="app-menu" class="app-menu hidden" role="menu">
-              <button class="app-menu-item" data-menu-id="open_browser" role="menuitem">在浏览器中打开</button>
-              <button class="app-menu-item" data-menu-id="restart" role="menuitem">重启服务</button>
-               <button class="app-menu-item" data-menu-id="stop" role="menuitem">停止服务</button>
-              <button class="app-menu-item" data-menu-id="open_data_dir" role="menuitem">打开数据目录</button>
-              <button class="app-menu-item" data-menu-id="connection_settings" role="menuitem">连接设置</button>
-               <button class="app-menu-item" data-menu-id="check_update" role="menuitem">检查更新</button>
-              <div class="app-menu-sep"></div>
-              <button class="app-menu-item" data-menu-id="toggle_autostart" role="menuitemcheckbox">
-                <svg class="icon app-menu-check hidden"><use href="#icon-check"></use></svg>
-                <span>开机自动启动</span>
-              </button>
-              <div class="app-menu-sep"></div>
-              <button class="app-menu-item" data-menu-id="quit" role="menuitem">退出</button>
-            </div>
-          </div>
-        </div>
-        <div id="toolbar-title">探索未至之境</div>
+                 <div id="toolbar-left">
+           <nav id="toolbar-menus" aria-label="主菜单">
+             <div class="toolbar-menu-wrap">
+               <button class="toolbar-menu-btn" type="button" data-toolbar-menu="service-menu" aria-haspopup="true">服务</button>
+               <div id="service-menu" class="toolbar-dropdown hidden" role="menu">
+                 <button class="app-menu-item app-menu-action" data-menu-id="restart" role="menuitem">重启服务</button>
+                 <button class="app-menu-item app-menu-action" data-menu-id="stop" role="menuitem">停止服务</button>
+                 <button class="app-menu-item app-menu-action" data-menu-id="open_browser" role="menuitem">在浏览器中打开</button>
+                 <button class="app-menu-item app-menu-action" data-menu-id="open_data_dir" role="menuitem">打开数据目录</button>
+                 <div class="app-menu-sep"></div>
+                 <button class="app-menu-item app-menu-action" data-menu-id="toggle_autostart" role="menuitemcheckbox">
+                   <svg class="icon app-menu-check hidden"><use href="#icon-check"></use></svg>
+                   <span>开机自动启动</span>
+                 </button>
+                 <div class="app-menu-sep"></div>
+                 <button class="app-menu-item app-menu-action" data-menu-id="quit" role="menuitem">退出</button>
+               </div>
+             </div>
+             <div class="toolbar-menu-wrap">
+               <button class="toolbar-menu-btn" type="button" data-toolbar-menu="connection-menu" aria-haspopup="true">连接</button>
+               <div id="connection-menu" class="toolbar-dropdown hidden" role="menu">
+                 <button class="app-menu-item app-menu-action" data-menu-id="connection_settings" role="menuitem">连接设置</button>
+               </div>
+             </div>
+             <div class="toolbar-menu-wrap">
+               <button class="toolbar-menu-btn" type="button" data-toolbar-menu="help-menu" aria-haspopup="true">帮助</button>
+               <div id="help-menu" class="toolbar-dropdown hidden" role="menu">
+                 <button class="app-menu-item app-menu-action" data-menu-id="about" role="menuitem">关于 DeepSeek Harness</button>
+               </div>
+             </div>
+           </nav>
+         </div>
+         <div id="toolbar-title">探索未至之境</div>
       </div>
       <div id="menu-dismiss-layer" class="hidden" aria-hidden="true"></div>
       <div id="shell-body">
@@ -97,13 +110,34 @@
       </div>
     </div>
 
+    <div id="about-overlay" class="hidden" role="presentation">
+      <section id="about-dialog" role="dialog" aria-modal="true" aria-labelledby="about-dialog-title">
+        <button type="button" id="btn-about-close" class="icon-only about-close" title="关闭" aria-label="关闭">✕</button>
+        <div class="about-mark" aria-hidden="true">
+          <img src="deepseek.png" alt="DeepSeek" />
+        </div>
+        <h2 id="about-dialog-title">DeepSeek Harness Desktop</h2>
+        <p class="about-version">版本 <strong id="about-version">读取中…</strong></p>
+        <p class="about-description">探索未至之境，连接本地 DeepSeek Harness。</p>
+        <button type="button" id="btn-about-github" class="about-github-btn">
+          <svg class="about-github-icon"><use href="#icon-github"></use></svg>
+          <span>GitHub 仓库</span>
+        </button>
+        <button type="button" id="btn-about-check-update" class="primary about-update-btn">
+          <span id="about-update-spinner" class="loading-spinner hidden" aria-hidden="true"></span>
+          <span id="about-update-label">检查更新</span>
+        </button>
+        <p id="about-update-status" class="about-update-status" aria-live="polite"></p>
+      </section>
+    </div>
+
     <div id="update-overlay" class="hidden" role="presentation">
       <section id="update-dialog" role="dialog" aria-modal="true" aria-labelledby="update-dialog-title">
         <h2 id="update-dialog-title">发现新版本</h2>
         <p id="update-dialog-text" class="muted"></p>
         <div class="update-dialog-actions">
-          <button id="btn-update-dialog-cancel">稍后</button>
-          <button id="btn-update-dialog-install" class="primary">立即更新</button>
+          <button type="button" id="btn-update-dialog-cancel">稍后</button>
+          <button type="button" id="btn-update-dialog-install" class="primary">立即更新</button>
         </div>
       </section>
     </div>

@@ -17,7 +17,7 @@
 // Reads: src-tauri/target/release/bundle/nsis/*.exe.sig
 // Writes: latest.json (repo root)
 
-import { existsSync, readdirSync, readFileSync, writeFileSync } from "node:fs";
+import { existsSync, mkdirSync, readdirSync, readFileSync, writeFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 
@@ -28,17 +28,22 @@ if (!version || !releaseTag) {
   process.exit(1);
 }
 
-// Find the single *.exe.sig in the nsis bundle dir (there's exactly one —
-// this project only builds one NSIS installer per release).
+// Match the signature for the exact version being released. Stale .sig files
+// from earlier releases may remain in the NSIS directory, so finding the
+// first *.exe.sig would silently sign the manifest with an old build.
 const nsisDir = join(root, "src-tauri", "target", "release", "bundle", "nsis");
-const entries = existsSync(nsisDir) ? readdirSync(nsisDir) : [];
-const sigName = entries.find((f) => f.endsWith(".exe.sig"));
-if (!sigName) {
-  console.error(`No .exe.sig found in ${nsisDir}. Entries: ${entries.join(", ") || "(none)"}`);
+const sigName = `DeepSeek Harness Desktop_${version}_x64-setup.exe.sig`;
+const sigPath = join(nsisDir, sigName);
+if (!existsSync(sigPath)) {
+  const available = existsSync(nsisDir)
+    ? readdirSync(nsisDir).filter((f) => f.endsWith(".exe.sig"))
+    : [];
+  console.error(`Signature not found: ${sigPath}`);
+  console.error(`Available signatures: ${available.join(", ") || "(none)"}`);
   process.exit(1);
 }
 const exeName = sigName.slice(0, -".sig".length);
-const signature = readFileSync(join(nsisDir, sigName), "utf8").trim();
+const signature = readFileSync(sigPath, "utf8").trim();
 
 // GitHub normalizes uploaded asset filenames: spaces (and () [] {}) become
 // dots. This must match tauri-action's own normalization exactly, or the
@@ -56,5 +61,9 @@ const manifest = {
   },
 };
 
-writeFileSync(join(root, "latest.json"), JSON.stringify(manifest, null, 2));
-console.log(`latest.json written: ${url}`);
+const outputDir = join(root, "src-tauri", "target", "release", "bundle");
+const outputPath = join(outputDir, "latest.json");
+mkdirSync(outputDir, { recursive: true });
+writeFileSync(outputPath, JSON.stringify(manifest, null, 2));
+console.log(`latest.json written: ${outputPath}`);
+console.log(`Update URL: ${url}`);

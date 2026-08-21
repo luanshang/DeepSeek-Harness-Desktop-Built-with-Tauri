@@ -37,7 +37,7 @@ npm run check:dsh-version
 
 ### 2. 升外壳版本号
 
-`src-tauri/tauri.conf.json` 的 `version` 和 `package.json` 的 `version` 改成同一个新版本号（如 `1.5.0`）。
+`src-tauri/tauri.conf.json` 的 `version` 和 `package.json` 的 `version` 改成同一个新版本号（如 `1.5.1`）。
 
 > 注意两条独立的版本轴线：这里升的是**外壳版本**（自动更新只认它），和内置 dsh 运行时的版本互不相干，别混。
 
@@ -61,20 +61,20 @@ npm run bundle
 1. 准备 Node 和内置 dsh 运行时；
 2. 构建 NSIS 安装器；
 3. 使用 `~/.tauri/dsh-desktop.key` 自动生成 `.exe.sig`；
-4. 自动生成仓库根目录的 `latest.json`。
+4. 自动生成 `src-tauri/target/release/bundle/latest.json`。
 
 如私钥不在默认位置，可设置：
 
 ```powershell
 $env:TAURI_SIGNING_PRIVATE_KEY_PATH = "D:\secure\dsh-desktop.key"
-$env:DSH_RELEASE_TAG = "v1.5.0" # 默认自动使用 v<package.json version>
+$env:DSH_RELEASE_TAG = "v1.5.1" # 默认自动使用 v<package.json version>
 ```
 
 最终产物：
 
 - `src-tauri/target/release/bundle/nsis/DeepSeek Harness Desktop_<版本>_x64-setup.exe`
 - 同目录的 `.exe.sig`
-- 仓库根目录的 `latest.json`
+- `src-tauri/target/release/bundle/latest.json`
 
 脚本拒绝在未设置 `TAURI_SIGNING_PRIVATE_KEY_PASSWORD` 时签名，避免构建过程中出现交互式密码输入。
 
@@ -82,18 +82,18 @@ $env:DSH_RELEASE_TAG = "v1.5.0" # 默认自动使用 v<package.json version>
 
 ```powershell
 git add -A
-git commit -m "Release v1.5.0"
-git tag v1.5.0
+git commit -m "Release v1.5.1"
+git tag v1.5.1
 git push
-git push origin v1.5.0
+git push origin v1.5.1
 ```
 
 ### 7. 创建 GitHub Release
 
-仓库页 → **Releases** → **Draft a new release** → 选 tag `v1.5.0` → 写更新说明 → 上传三个文件：
+仓库页 → **Releases** → **Draft a new release** → 选 tag `v1.5.1` → 写更新说明 → 上传三个文件：
 
-- `DeepSeek Harness Desktop_1.5.0_x64-setup.exe`
-- `DeepSeek Harness Desktop_1.5.0_x64-setup.exe.sig`
+- `DeepSeek Harness Desktop_1.5.1_x64-setup.exe`
+- `DeepSeek Harness Desktop_1.5.1_x64-setup.exe.sig`
 - `latest.json`
 
 → **Publish release**。
